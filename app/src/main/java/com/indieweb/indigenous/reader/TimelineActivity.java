@@ -444,6 +444,18 @@ public class TimelineActivity extends AppCompatActivity implements SwipeRefreshL
 
             debugResponse = response;
             List<TimelineItem> parseItems = reader.parseTimelineResponse(response, channelId, channelName, entries, isGlobalUnread, isSearch, recursiveReference, olderItems);
+
+            // Client-side filtering for servers that don't support is_read parameter
+            if (showUnread) {
+                List<TimelineItem> unreadItems = new ArrayList<>();
+                for (TimelineItem item : parseItems) {
+                    if (!item.isRead()) {
+                        unreadItems.add(item);
+                    }
+                }
+                parseItems = unreadItems;
+            }
+
             TimelineItems.addAll(parseItems);
 
             if (firstEntryId == null && parseItems.size() > 0) {
