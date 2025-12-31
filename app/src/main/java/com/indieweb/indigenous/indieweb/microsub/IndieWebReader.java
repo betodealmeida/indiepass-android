@@ -201,7 +201,12 @@ public class IndieWebReader extends ReaderBase {
         String endpoint = user.getMicrosubEndpoint();
 
         if (!isSearch) {
-            endpoint += "?action=timeline&channel=" + channelId;
+            if (endpoint.contains("?")) {
+                endpoint += "&";
+            } else {
+                endpoint += "?";
+            }
+            endpoint += "action=timeline&channel=" + channelId;
         }
 
         // Global unread.
